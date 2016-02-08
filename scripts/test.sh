@@ -62,22 +62,5 @@ if [[ $TEST_SUITE == "unit" ]]; then
 	done
  
 	go tool cover -func profile.cov
- 
-	# Disabled Coveralls.io for now
-	# To submit the test coverage result to coveralls.io,
-	# use goveralls (https://github.com/mattn/goveralls)
-	# goveralls -coverprofile=profile.cov -service=travis-ci -repotoken t47LG6BQsfLwb9WxB56hXUezvwpED6D11
-	#
-	# If running inside Travis we update coveralls. We don't want his happening on Macs
-	# if [ "$TRAVIS" == "true" ]
-	# then
-	#     n=1
-	#     until [ $n -ge 6 ]
-	#     do
-	#         echo "posting to coveralls attempt $n of 5"
-	#         goveralls -v -coverprofile=profile.cov -service travis.ci -repotoken $COVERALLS_TOKEN && break
-	#         n=$[$n+1]
-	#         sleep 30
-	#     done
-	# fi
+	
 fi
