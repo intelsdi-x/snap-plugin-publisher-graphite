@@ -75,7 +75,7 @@ func (f *graphitePublisher) Publish(contentType string, content []byte, config m
 		key := strings.Join(m.Namespace(), ".")
 		data := fmt.Sprintf("%v", m.Data())
 		gite.SimpleSend(key, data)
-		logger.Printf("Send %s, %d", key, data)
+		logger.Printf("Send %s, %s", key, data)
 	}
 	return nil
 }

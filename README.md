@@ -8,7 +8,7 @@ This plugin publishes metrics to graphite.
   * [Configuration and Usage](configuration-and-usage)
 2. [Documentation](#documentation)
   * [Examples](#examples)
-  * [Roadmap] (#roadmap)
+  * [Roadmap](#roadmap)
 3. [Community Support](#community-support)
 4. [Contributing](#contributing)
 5. [License](#license)
@@ -44,7 +44,7 @@ This builds the plugin in `/build/rootfs`
 
 ### Examples
 Example task manifest to use Graphite plugin:
-```
+```json
 {
     "version": 1,
     "schedule": {

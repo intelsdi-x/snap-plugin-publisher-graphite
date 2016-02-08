@@ -20,9 +20,10 @@ limitations under the License.
 package main
 
 import (
+	"os"
+
 	"github.com/intelsdi-x/snap-plugin-publisher-graphite/graphite"
 	"github.com/intelsdi-x/snap/control/plugin"
-	"os"
 )
 
 func main() {

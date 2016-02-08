@@ -20,7 +20,6 @@ limitations under the License.
 package main
 
 import (
-	"fmt"
 	"os"
 	"path"
 	"testing"
@@ -34,26 +33,20 @@ import (
 var (
 	PluginName = "snap-plugin-publisher-graphite"
 	PluginType = "publisher"
-	SnapPath   = os.Getenv("SNAP_PATH")
-	PluginPath = path.Join(".", PluginName)
+	PluginPath = path.Join("build", "rootfs", PluginName)
 )
 
 func TestGraphitePluginLoad(t *testing.T) {
-	// These tests only work if SNAP_PATH is known.
-	if SnapPath != "" {
-		// Helper plugin trigger build if possible for this plugin
-		helper.BuildPlugin(PluginType, PluginName)
-		Convey("ensure plugin loads and responds", t, func() {
-			c := control.New()
-			c.Start()
-			gp, _ := core.NewRequestedPlugin(PluginPath)
-			_, err := c.Load(gp)
-
-			So(err, ShouldBeNil)
-		})
-	} else {
-		fmt.Printf("SNAP_PATH not set. Cannot test %s plugin.\n", PluginName)
-	}
+	// Helper plugin trigger build if possible for this plugin
+	helper.BuildPlugin(PluginType, PluginName)
+	Convey("ensure plugin loads and responds", t, func() {
+		c := control.New()
+		c.Start()
+		gp, err := core.NewRequestedPlugin(PluginPath)
+		So(err, ShouldBeNil)
+		_, err = c.Load(gp)
+		So(err, ShouldBeNil)
+	})
 }
 
 func TestMain(t *testing.T) {
