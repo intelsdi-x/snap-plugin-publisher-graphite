@@ -35,22 +35,19 @@ var (
 	PluginName = "snap-plugin-publisher-graphite"
 	PluginType = "publisher"
 	SnapPath   = os.Getenv("SNAP_PATH")
-	PluginPath = path.Join(SnapPath, "plugin", PluginName)
+	PluginPath = path.Join(".", PluginName)
 )
 
 func TestGraphitePluginLoad(t *testing.T) {
 	// These tests only work if SNAP_PATH is known.
-	// It is the responsibility of the testing framework to
-	// build the plugins first into the build dir.
 	if SnapPath != "" {
 		// Helper plugin trigger build if possible for this plugin
 		helper.BuildPlugin(PluginType, PluginName)
-		//
 		Convey("ensure plugin loads and responds", t, func() {
 			c := control.New()
 			c.Start()
-			rp, _ := core.NewRequestedPlugin(PluginPath)
-			_, err := c.Load(rp)
+			gp, _ := core.NewRequestedPlugin(PluginPath)
+			_, err := c.Load(gp)
 
 			So(err, ShouldBeNil)
 		})
