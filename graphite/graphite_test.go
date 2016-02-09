@@ -60,6 +60,10 @@ func TestGraphitePlugin(t *testing.T) {
 					})
 
 					testConfig := make(map[string]ctypes.ConfigValue)
+					Convey("Should error if server and port are not set", func() {
+						_, errs := configPolicy.Get([]string{""}).Process(testConfig)
+						So(errs, ShouldNotBeNil)
+					})
 					testConfig["server"] = ctypes.ConfigValueStr{Value: "localhost"}
 					testConfig["port"] = ctypes.ConfigValueInt{Value: 8080}
 					cfg, errs := configPolicy.Get([]string{""}).Process(testConfig)

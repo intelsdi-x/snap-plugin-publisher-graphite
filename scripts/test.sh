@@ -19,8 +19,8 @@ if [[ $TEST_SUITE == "unit" ]]; then
 	go get golang.org/x/tools/cmd/cover
 	go get github.com/marpaia/graphite-golang
 	
-	TEST_DIRS="main.go graphite "
-	VET_DIRS=". ./graphite/..."
+	TEST_DIRS="main.go graphite logHelper "
+	VET_DIRS=". ./graphite/... ./logHelper/..."
 
 	set -e
 
