@@ -41,48 +41,48 @@
 		},
 		{
 			"ImportPath": "github.com/intelsdi-x/snap/control",
-			"Comment": "v0.11.0-beta-43-gdd1f139",
-			"Rev": "dd1f13956d1f7d610fc353329de23e6e1c76fe5b"
+			"Comment": "v0.12.0-beta-17-g7cb26be",
+			"Rev": "7cb26be3408757c7f436b77f6acba1576e0e2d06"
 		},
 		{
 			"ImportPath": "github.com/intelsdi-x/snap/core",
-			"Comment": "v0.11.0-beta-43-gdd1f139",
-			"Rev": "dd1f13956d1f7d610fc353329de23e6e1c76fe5b"
+			"Comment": "v0.12.0-beta-17-g7cb26be",
+			"Rev": "7cb26be3408757c7f436b77f6acba1576e0e2d06"
 		},
 		{
 			"ImportPath": "github.com/intelsdi-x/snap/pkg/aci",
-			"Comment": "v0.11.0-beta-43-gdd1f139",
-			"Rev": "dd1f13956d1f7d610fc353329de23e6e1c76fe5b"
+			"Comment": "v0.12.0-beta-17-g7cb26be",
+			"Rev": "7cb26be3408757c7f436b77f6acba1576e0e2d06"
 		},
 		{
 			"ImportPath": "github.com/intelsdi-x/snap/pkg/chrono",
-			"Comment": "v0.11.0-beta-43-gdd1f139",
-			"Rev": "dd1f13956d1f7d610fc353329de23e6e1c76fe5b"
+			"Comment": "v0.12.0-beta-17-g7cb26be",
+			"Rev": "7cb26be3408757c7f436b77f6acba1576e0e2d06"
 		},
 		{
 			"ImportPath": "github.com/intelsdi-x/snap/pkg/ctree",
-			"Comment": "v0.11.0-beta-43-gdd1f139",
-			"Rev": "dd1f13956d1f7d610fc353329de23e6e1c76fe5b"
+			"Comment": "v0.12.0-beta-17-g7cb26be",
+			"Rev": "7cb26be3408757c7f436b77f6acba1576e0e2d06"
 		},
 		{
 			"ImportPath": "github.com/intelsdi-x/snap/pkg/psigning",
-			"Comment": "v0.11.0-beta-43-gdd1f139",
-			"Rev": "dd1f13956d1f7d610fc353329de23e6e1c76fe5b"
+			"Comment": "v0.12.0-beta-17-g7cb26be",
+			"Rev": "7cb26be3408757c7f436b77f6acba1576e0e2d06"
 		},
 		{
 			"ImportPath": "github.com/intelsdi-x/snap/pkg/schedule",
-			"Comment": "v0.11.0-beta-43-gdd1f139",
-			"Rev": "dd1f13956d1f7d610fc353329de23e6e1c76fe5b"
+			"Comment": "v0.12.0-beta-17-g7cb26be",
+			"Rev": "7cb26be3408757c7f436b77f6acba1576e0e2d06"
 		},
 		{
 			"ImportPath": "github.com/intelsdi-x/snap/plugin/helper",
-			"Comment": "v0.11.0-beta-43-gdd1f139",
-			"Rev": "dd1f13956d1f7d610fc353329de23e6e1c76fe5b"
+			"Comment": "v0.12.0-beta-17-g7cb26be",
+			"Rev": "7cb26be3408757c7f436b77f6acba1576e0e2d06"
 		},
 		{
 			"ImportPath": "github.com/intelsdi-x/snap/scheduler/wmap",
-			"Comment": "v0.11.0-beta-43-gdd1f139",
-			"Rev": "dd1f13956d1f7d610fc353329de23e6e1c76fe5b"
+			"Comment": "v0.12.0-beta-17-g7cb26be",
+			"Rev": "7cb26be3408757c7f436b77f6acba1576e0e2d06"
 		},
 		{
 			"ImportPath": "github.com/jtolds/gls",

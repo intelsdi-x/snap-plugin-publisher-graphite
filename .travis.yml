@@ -16,7 +16,7 @@ install:
 - export TMPDIR=$HOME/tmp
 - mkdir -p $TMPDIR
 - cd $SNAP_PLUGIN_SOURCE # change dir into source
-- make deps
+- make
 script:
 - make check TEST=$TEST 2>&1 # Run test suite
 notifications:
