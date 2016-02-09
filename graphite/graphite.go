@@ -65,8 +65,8 @@ func (f *graphitePublisher) Publish(contentType string, content []byte, config m
 
 	logger.Printf("publishing %v metrics to %v", len(metrics), config)
 
-	server := config["graphite-server"].(ctypes.ConfigValueStr).Value
-	port := config["graphite-port"].(ctypes.ConfigValueInt).Value
+	server := config["server"].(ctypes.ConfigValueStr).Value
+	port := config["port"].(ctypes.ConfigValueInt).Value
 
 	logger.Printf("Attempting to connect to %s:%d", server, port)
 	gite, err := graphite.NewGraphite(server, port)
@@ -88,12 +88,12 @@ func (f *graphitePublisher) GetConfigPolicy() (*cpolicy.ConfigPolicy, error) {
 	cp := cpolicy.New()
 	config := cpolicy.NewPolicyNode()
 
-	r1, err := cpolicy.NewStringRule("graphite-server", true)
+	r1, err := cpolicy.NewStringRule("server", true)
 	handleErr(err)
 	r1.Description = "Address of graphite server"
 	config.Add(r1)
 
-	r2, err := cpolicy.NewIntegerRule("graphite-port", true)
+	r2, err := cpolicy.NewIntegerRule("port", true)
 	handleErr(err)
 	r2.Description = "Port to connect on"
 	config.Add(r2)

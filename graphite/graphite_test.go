@@ -60,8 +60,8 @@ func TestGraphitePlugin(t *testing.T) {
 					})
 
 					testConfig := make(map[string]ctypes.ConfigValue)
-					testConfig["graphite-server"] = ctypes.ConfigValueStr{Value: "localhost"}
-					testConfig["graphite-port"] = ctypes.ConfigValueInt{Value: 8080}
+					testConfig["server"] = ctypes.ConfigValueStr{Value: "localhost"}
+					testConfig["port"] = ctypes.ConfigValueInt{Value: 8080}
 					cfg, errs := configPolicy.Get([]string{""}).Process(testConfig)
 
 					Convey("So configpolicy should process testConfig and return a config", func() {

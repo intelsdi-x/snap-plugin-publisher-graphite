@@ -16,6 +16,7 @@ This plugin publishes metrics to graphite.
 
 ### System Requirements
 * Graphite set up and running
+	`An easy way to get up and running for testing is to use [this]()
 * Snap Daemon running
 
 ### Installation
@@ -72,8 +73,8 @@ Example task manifest to use Graphite plugin:
                         {
                             "plugin_name": "graphite",
                             "config": {
-                                "graphite-server": "127.0.0.1",
-                                "graphite-port": 2003
+                                "server": "127.0.0.1",
+                                "port": 2003
                             }
                         }
                     ]
