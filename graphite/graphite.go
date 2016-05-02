@@ -69,9 +69,14 @@ func (f *graphitePublisher) Publish(contentType string, content []byte, config m
 
 	server := config["server"].(ctypes.ConfigValueStr).Value
 	port := config["port"].(ctypes.ConfigValueInt).Value
-
 	logger.Debug("Attempting to connect to %s:%d", server, port)
-	gite, err := graphite.NewGraphite(server, port)
+	var gite *graphite.Graphite
+	var err error
+	if pre, ok := config["prefix"]; ok {
+		gite, err = graphite.NewGraphiteWithMetricPrefix(server, port, pre.(ctypes.ConfigValueStr).Value)
+	} else {
+		gite, err = graphite.NewGraphite(server, port)
+	}
 	if err != nil {
 		logger.Errorf("Error Connecting to graphite at %s:%d. Error: %v", server, port, err)
 		return fmt.Errorf("Error Connecting to graphite at %s:%d. Error: %v", server, port, err)
@@ -111,6 +116,11 @@ func (f *graphitePublisher) GetConfigPolicy() (*cpolicy.ConfigPolicy, error) {
 	handleErr(err)
 	r2.Description = "Port to connect on"
 	config.Add(r2)
+
+	r3, err := cpolicy.NewStringRule("prefix", false)
+	handleErr(err)
+	r3.Description = "Prefix to add to all metrics"
+	config.Add(r3)
 
 	cp.Add([]string{""}, config)
 	fmt.Println(config)
