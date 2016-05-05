@@ -40,7 +40,7 @@ func TestGraphitePluginLoad(t *testing.T) {
 	// Helper plugin trigger build if possible for this plugin
 	helper.BuildPlugin(PluginType, PluginName)
 	Convey("ensure plugin loads and responds", t, func() {
-		c := control.New()
+		c := control.New(control.GetDefaultConfig())
 		c.Start()
 		gp, err := core.NewRequestedPlugin(PluginPath)
 		So(err, ShouldBeNil)

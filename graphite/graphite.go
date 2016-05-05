@@ -23,7 +23,6 @@ import (
 	"bytes"
 	"encoding/gob"
 	"fmt"
-	"strings"
 
 	log "github.com/Sirupsen/logrus"
 
@@ -36,7 +35,7 @@ import (
 
 const (
 	name       = "graphite"
-	version    = 1
+	version    = 2
 	pluginType = plugin.PublisherPluginType
 )
 
@@ -51,7 +50,7 @@ func (f *graphitePublisher) Publish(contentType string, content []byte, config m
 
 	logger := plh.GetLogger(config, Meta())
 	logger.Debug("Publishing started")
-	var metrics []plugin.PluginMetricType
+	var metrics []plugin.MetricType
 
 	switch contentType {
 	case plugin.SnapGOBContentType:
@@ -83,7 +82,7 @@ func (f *graphitePublisher) Publish(contentType string, content []byte, config m
 	}
 	logger.Debug("Connected to %s:%s successfully", server, port)
 	for _, m := range metrics {
-		key := strings.Join(m.Namespace(), ".")
+		key := m.Namespace().Key()
 		data := fmt.Sprintf("%v", m.Data())
 		logger.Debug("Attempting to send %s:%s", key, data)
 		err = gite.SimpleSend(key, data)
