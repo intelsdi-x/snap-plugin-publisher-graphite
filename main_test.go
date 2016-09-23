@@ -1,3 +1,5 @@
+// +build medium
+
 /*
 http://www.apache.org/licenses/LICENSE-2.0.txt
 
@@ -22,6 +24,7 @@ package main
 import (
 	"os"
 	"path"
+	"runtime"
 	"testing"
 
 	"github.com/intelsdi-x/snap/control"
@@ -33,7 +36,7 @@ import (
 var (
 	PluginName = "snap-plugin-publisher-graphite"
 	PluginType = "publisher"
-	PluginPath = path.Join("build", "rootfs", PluginName)
+	PluginPath = path.Join("build", runtime.GOOS, "x86_64", PluginName)
 )
 
 func TestGraphitePluginLoad(t *testing.T) {
