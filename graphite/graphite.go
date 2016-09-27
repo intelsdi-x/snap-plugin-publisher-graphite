@@ -34,7 +34,7 @@ import (
 
 const (
 	name       = "graphite"
-	version    = 2
+	version    = 3
 	pluginType = plugin.PublisherPluginType
 )
 
