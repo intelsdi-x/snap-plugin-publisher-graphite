@@ -1,0 +1,16 @@
+package: github.com/intelsdi-x/snap-plugin-publisher-graphite
+import:
+- package: github.com/Sirupsen/logrus
+  version: ^0.10.0
+- package: github.com/intelsdi-x/snap
+  version: ^0.16.1-beta
+  subpackages:
+  - control/plugin
+  - control/plugin/cpolicy
+  - core/ctypes
+- package: github.com/marpaia/graphite-golang
+testImport:
+- package: github.com/smartystreets/goconvey
+  version: ^1.6.2
+  subpackages:
+  - convey
