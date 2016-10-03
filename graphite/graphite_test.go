@@ -24,28 +24,20 @@ package graphite
 import (
 	"testing"
 
-	"github.com/intelsdi-x/snap/control/plugin"
-	"github.com/intelsdi-x/snap/control/plugin/cpolicy"
-	"github.com/intelsdi-x/snap/core/ctypes"
+	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestGraphitePlugin(t *testing.T) {
-	Convey("Meta should return Metadata for the plugin", t, func() {
-		meta := Meta()
-		So(meta.Name, ShouldResemble, name)
-		So(meta.Version, ShouldResemble, version)
-		So(meta.Type, ShouldResemble, plugin.PublisherPluginType)
-	})
 
 	Convey("Create Graphite publisher", t, func() {
-		gp := NewGraphitePublisher()
+		gp := &GraphitePublisher{}
 		Convey("So publisher should not be nil", func() {
 			So(gp, ShouldNotBeNil)
 		})
 
 		Convey("Publisher should be of type graphitePublisher", func() {
-			So(gp, ShouldHaveSameTypeAs, &graphitePublisher{})
+			So(gp, ShouldHaveSameTypeAs, &GraphitePublisher{})
 		})
 
 		configPolicy, err := gp.GetConfigPolicy()
@@ -58,23 +50,23 @@ func TestGraphitePlugin(t *testing.T) {
 					So(err, ShouldBeNil)
 
 					Convey("config policy should be a cpolicy.ConfigPolicy", func() {
-						So(configPolicy, ShouldHaveSameTypeAs, &cpolicy.ConfigPolicy{})
+						So(configPolicy, ShouldHaveSameTypeAs, plugin.ConfigPolicy{})
 					})
 
-					testConfig := make(map[string]ctypes.ConfigValue)
-					Convey("Should error if server and port are not set", func() {
-						_, errs := configPolicy.Get([]string{""}).Process(testConfig)
-						So(errs, ShouldNotBeNil)
-					})
-					testConfig["server"] = ctypes.ConfigValueStr{Value: "localhost"}
-					testConfig["port"] = ctypes.ConfigValueInt{Value: 8080}
-					cfg, errs := configPolicy.Get([]string{""}).Process(testConfig)
+					testConfig := make(plugin.Config)
+					testConfig["server"] = "localhost"
+					testConfig["port"] = int64(8080)
 
-					Convey("So configpolicy should process testConfig and return a config", func() {
-						So(cfg, ShouldNotBeNil)
+					server, err := testConfig.GetString("server")
+					Convey("So testConfig should return the right server config", func() {
+						So(err, ShouldBeNil)
+						So(server, ShouldEqual, "localhost")
 					})
-					Convey("so testConfig processing should not return errors", func() {
-						So(errs.HasErrors(), ShouldBeFalse)
+
+					port, err := testConfig.GetInt("port")
+					Convey("So testConfig should return the right port config", func() {
+						So(err, ShouldBeNil)
+						So(port, ShouldEqual, int64(8080))
 					})
 				})
 			})
