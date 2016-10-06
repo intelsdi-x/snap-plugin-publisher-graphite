@@ -1,0 +1,9 @@
+name: graphite
+type: publisher
+maintainer: core
+license: Apache-2.0
+description: "Publishes metrics to graphite."
+badge:
+  - "[![Build Status](https://travis-ci.org/intelsdi-x/snap-plugin-publisher-graphite.svg?branch=master)](https://travis-ci.org/intelsdi-x/snap-plugin-publisher-graphite)"
+ci:
+  - https://travis-ci.org/intelsdi-x/snap-plugin-publisher-graphite
