@@ -20,86 +20,66 @@ limitations under the License.
 package graphite
 
 import (
-	"bytes"
-	"encoding/gob"
 	"fmt"
 	"strings"
 
-	plh "github.com/intelsdi-x/snap-plugin-publisher-graphite/logHelper"
-	"github.com/intelsdi-x/snap/control/plugin"
-	"github.com/intelsdi-x/snap/control/plugin/cpolicy"
-	"github.com/intelsdi-x/snap/core/ctypes"
+	log "github.com/Sirupsen/logrus"
+	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
 	"github.com/marpaia/graphite-golang"
 )
 
 const (
-	name       = "graphite"
-	version    = 3
-	pluginType = plugin.PublisherPluginType
+	Name    = "graphite"
+	Version = 4
 )
 
-type graphitePublisher struct {
+type GraphitePublisher struct {
 }
 
-func NewGraphitePublisher() *graphitePublisher {
-	return &graphitePublisher{}
-}
-
-func (f *graphitePublisher) Publish(contentType string, content []byte, config map[string]ctypes.ConfigValue) error {
-
-	logger := plh.GetLogger(config, Meta())
+func (f *GraphitePublisher) Publish(metrics []plugin.Metric, cfg plugin.Config) error {
+	logger := getLogger(cfg)
 	logger.Debug("Publishing started")
-	var metrics []plugin.MetricType
 	var tagsForPrefix []string
 
-	switch contentType {
-	case plugin.SnapGOBContentType:
-		dec := gob.NewDecoder(bytes.NewBuffer(content))
-		if err := dec.Decode(&metrics); err != nil {
-			logger.Errorf("Error decoding: error=%v content=%v", err, content)
-			return err
-		}
-	default:
-		logger.Errorf("Error unknown content type '%v'", contentType)
-		return fmt.Errorf("Unknown content type '%s'", contentType)
+	logger.Debug("publishing %v metrics to %v", len(metrics), cfg)
+	server, err := cfg.GetString("server")
+	if err != nil {
+		return err
 	}
-
-	logger.Debug("publishing %v metrics to %v", len(metrics), config)
-
-	server := config["server"].(ctypes.ConfigValueStr).Value
-	port := config["port"].(ctypes.ConfigValueInt).Value
-
-	tagsConfig, ok := config["prefix_tags"]
-	if ok {
-		tagsForPrefix = strings.Split(tagsConfig.(ctypes.ConfigValueStr).Value, ",")
+	port, err := cfg.GetInt("port")
+	if err != nil {
+		return err
+	}
+	tagConfigs, err := cfg.GetString("prefix_tags")
+	if err == nil {
+		tagsForPrefix = strings.Split(tagConfigs, ",")
+	}
+	pre, err := cfg.GetString("prefix")
+	if err != nil {
+		pre = ""
 	}
 
 	logger.Debug("Attempting to connect to %s:%d", server, port)
-	var gite *graphite.Graphite
-	var err error
-	if pre, ok := config["prefix"]; ok {
-		gite, err = graphite.NewGraphiteWithMetricPrefix(server, port, pre.(ctypes.ConfigValueStr).Value)
-	} else {
-		gite, err = graphite.NewGraphite(server, port)
-	}
-	defer gite.Disconnect()
+	gite, err := graphite.NewGraphiteWithMetricPrefix(server, int(port), pre)
 	if err != nil {
 		logger.Errorf("Error Connecting to graphite at %s:%d. Error: %v", server, port, err)
 		return fmt.Errorf("Error Connecting to graphite at %s:%d. Error: %v", server, port, err)
 	}
+	defer gite.Disconnect()
 	logger.Debug("Connected to %s:%s successfully", server, port)
+
 	giteMetrics := make([]graphite.Metric, len(metrics))
 	for i, m := range metrics {
-		key := m.Namespace().Key()
+		key := m.Namespace.Key()
 		for _, tag := range tagsForPrefix {
-			nextTag, ok := m.Tags()[tag]
+			nextTag, ok := m.Tags[tag]
 			if ok {
 				key = nextTag + "." + key
 			}
 		}
-		data := fmt.Sprintf("%v", m.Data())
+		data := fmt.Sprintf("%v", m.Data)
 		logger.Debug("Metric ready to send %s:%s", key, data)
-		giteMetrics[i] = graphite.NewMetric(key, data, m.Timestamp().Unix())
+		giteMetrics[i] = graphite.NewMetric(key, data, m.Timestamp.Unix())
 	}
 
 	err = gite.SendMetrics(giteMetrics)
@@ -108,42 +88,41 @@ func (f *graphitePublisher) Publish(contentType string, content []byte, config m
 		return fmt.Errorf("Unable to send metrics. Error: %s", err)
 	}
 	logger.Debug("Metrics sent to Graphite.")
+
 	return nil
 }
 
-func Meta() *plugin.PluginMeta {
-	return plugin.NewPluginMeta(name, version, pluginType, []string{plugin.SnapGOBContentType}, []string{plugin.SnapGOBContentType})
+func (f *GraphitePublisher) GetConfigPolicy() (plugin.ConfigPolicy, error) {
+	policy := plugin.NewConfigPolicy()
+
+	policy.AddNewStringRule([]string{""}, "server", true)
+	policy.AddNewIntRule([]string{""}, "port", false, plugin.SetDefaultInt(2003))
+	policy.AddNewStringRule([]string{""}, "prefix_tags", false, plugin.SetDefaultString("plugin_running_on"))
+	policy.AddNewStringRule([]string{""}, "prefix", false)
+	policy.AddNewStringRule([]string{""}, "log-level", false)
+
+	return *policy, nil
 }
 
-func (f *graphitePublisher) GetConfigPolicy() (*cpolicy.ConfigPolicy, error) {
-	cp := cpolicy.New()
-	config := cpolicy.NewPolicyNode()
-	config, err := plh.AddLogging(config)
-	if err != nil {
-		config = cpolicy.NewPolicyNode()
-	}
-	r1, err := cpolicy.NewStringRule("server", true)
-	if err != nil {
-		return nil, err
-	}
-	r1.Description = "Address of graphite server"
-	config.Add(r1)
+func getLogger(cfg plugin.Config) *log.Entry {
+	logger := log.WithFields(log.Fields{
+		"plugin-name":    Name,
+		"plugin-version": Version,
+		"plugin-type":    "publisher",
+	})
 
-	r2, err := cpolicy.NewIntegerRule("port", true)
-	if err != nil {
-		return nil, err
-	}
-	r2.Description = "Port to connect on"
-	config.Add(r2)
+	log.SetLevel(log.WarnLevel)
 
-	r3, err := cpolicy.NewStringRule("prefix", false)
-	if err != nil {
-		return nil, err
+	levelValue, err := cfg.GetString("log-level")
+	if err == nil {
+		if level, err := log.ParseLevel(strings.ToLower(levelValue)); err == nil {
+			log.SetLevel(level)
+		} else {
+			log.WithFields(log.Fields{
+				"value":             strings.ToLower(levelValue),
+				"acceptable values": "warn, error, debug, info",
+			}).Warn("Invalid config value")
+		}
 	}
-	r3.Description = "Prefix to add to all metrics"
-	config.Add(r3)
-
-	cp.Add([]string{""}, config)
-	fmt.Println(config)
-	return cp, nil
+	return logger
 }
