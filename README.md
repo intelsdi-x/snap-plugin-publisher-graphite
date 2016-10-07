@@ -15,13 +15,11 @@ This plugin publishes metrics to graphite.
 6. [Acknowledgements](#acknowledgements)
 
 ### System Requirements
-* Graphite set up and running
-	`An easy way to get up and running for testing is to use [this]()
 * Snap Daemon running
 
 ### Installation
 #### Download Graphite plugin binary:
-You can get the pre-built binaries for your OS and architecture at snap's [Github Releases](https://github.com/intelsdi-x/snap/releases) page.
+You can get the pre-built binaries for your OS and architecture at snap's [Github Releases](https://github.com/intelsdi-x/snap-plugin-publisher-graphite/releases) page.
 
 #### To build the plugin binary:
 Fork https://github.com/intelsdi-x/snap-plugin-publisher-graphite
@@ -33,17 +31,18 @@ Build the plugin by running make in repo:
 ```
 $ make
 ```
-This builds the plugin in `/build/rootfs`
+This builds the plugin in `/build/$GOOS/$GOARCH`
 
 ### Configuration and Usage
-* Set up the [snap framework](https://github.com/intelsdi-x/snap/blob/master/README.md#getting-started)
-* Ensure `$SNAP_PATH` is exported
-`export SNAP_PATH=$GOPATH/src/github.com/intelsdi-x/snap/build`
+* Set up the [Snap framework](https://github.com/intelsdi-x/snap/blob/master/README.md#getting-started)
 
 ## Documentation
 [graphite](https://graphite.readthedocs.org/en/latest/)
 
 ### Examples
+
+
+#### Example task
 Example task manifest to use Graphite plugin:
 ```json
 {
@@ -68,7 +67,6 @@ Example task manifest to use Graphite plugin:
             "process": [
                 {
                     "plugin_name": "passthru",
-                    "process": null,
                     "publish": [
                         {
                             "plugin_name": "graphite",
@@ -84,6 +82,12 @@ Example task manifest to use Graphite plugin:
     }
 }
 ```
+
+List of config arguments:
+* "server" (required) - the IP of graphite host.
+* "port" (optional) - 2003 by default.
+* "prefix_tags" (optional) - coma separated list of metric tags used to add prefix on the published name, "plugin_running_on" by default.
+* "prefix" (optional) - change the published name prefix, happens before prefixes from "prefix_tags".
 
 ### Roadmap
 There isn't a current roadmap for this plugin, but it is in active development. As we launch this plugin, we do not have any outstanding requirements for the next release.

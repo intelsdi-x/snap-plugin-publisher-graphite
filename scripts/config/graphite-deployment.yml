@@ -1,0 +1,44 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata: 
+    name: graphite-deployment
+spec:
+    replicas: 1
+    template: 
+        metadata: 
+            labels:
+                app: graphite
+        spec:
+            containers:
+            - name: graphite
+              image: hopsoft/graphite-statsd:v0.9.15-phusion0.9.18
+              imagePullPolicy: "IfNotPresent"
+              ports:
+              - containerPort: 2003
+              - containerPort: 80
+            - name: main
+              image: intelsdi/snap:alpine
+              env:
+                - name: SNAP_VERSION
+                  value: "latest"
+              imagePullPolicy: "IfNotPresent"
+---
+apiVersion: v1
+kind: Service
+metadata:  
+  labels:
+    app: graphite
+  name: graphite
+spec:
+  ports:
+  - name: graphite
+    port: 2003
+    targetPort: 2003
+  - name: api
+    port: 80
+    targetPort: 80
+  selector:
+    app: graphite
+  sessionAffinity: None
+  type: NodePort
