@@ -5,5 +5,7 @@ license: Apache-2.0
 description: "Publishes metrics to graphite."
 badge:
   - "[![Build Status](https://travis-ci.org/intelsdi-x/snap-plugin-publisher-graphite.svg?branch=master)](https://travis-ci.org/intelsdi-x/snap-plugin-publisher-graphite)"
+  - "[![Build Status](https://ci.snap-telemetry.io/buildStatus/icon?job=snap-plugin-publisher-graphite-large-prb-k8s)](https://ci.snap-telemetry.io/job/snap-plugin-publisher-graphite-large-prb-k8s/)"
 ci:
   - https://travis-ci.org/intelsdi-x/snap-plugin-publisher-graphite
+  - https://ci.snap-telemetry.io/job/snap-plugin-publisher-graphite-large-prb-k8s/
