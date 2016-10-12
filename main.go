@@ -19,11 +19,13 @@ limitations under the License.
 
 package main
 
-import (
-	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
-	"github.com/intelsdi-x/snap-plugin-publisher-graphite/graphite"
+import "github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
+
+const (
+	Name    = "graphite"
+	Version = 4
 )
 
 func main() {
-	plugin.StartPublisher(&graphite.GraphitePublisher{}, graphite.Name, graphite.Version)
+	plugin.StartPublisher(&GraphitePublisher{}, Name, Version)
 }

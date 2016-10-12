@@ -17,20 +17,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package graphite
+package main
 
 import (
 	"fmt"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
 	"github.com/marpaia/graphite-golang"
-)
-
-const (
-	Name    = "graphite"
-	Version = 4
 )
 
 type GraphitePublisher struct {
@@ -102,27 +96,4 @@ func (f *GraphitePublisher) GetConfigPolicy() (plugin.ConfigPolicy, error) {
 	policy.AddNewStringRule([]string{""}, "log-level", false)
 
 	return *policy, nil
-}
-
-func getLogger(cfg plugin.Config) *log.Entry {
-	logger := log.WithFields(log.Fields{
-		"plugin-name":    Name,
-		"plugin-version": Version,
-		"plugin-type":    "publisher",
-	})
-
-	log.SetLevel(log.WarnLevel)
-
-	levelValue, err := cfg.GetString("log-level")
-	if err == nil {
-		if level, err := log.ParseLevel(strings.ToLower(levelValue)); err == nil {
-			log.SetLevel(level)
-		} else {
-			log.WithFields(log.Fields{
-				"value":             strings.ToLower(levelValue),
-				"acceptable values": "warn, error, debug, info",
-			}).Warn("Invalid config value")
-		}
-	}
-	return logger
 }
