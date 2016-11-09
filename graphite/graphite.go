@@ -70,7 +70,7 @@ func (f *GraphitePublisher) Publish(metrics []plugin.Metric, cfg plugin.Config) 
 
 	giteMetrics := make([]graphite.Metric, len(metrics))
 	for i, m := range metrics {
-		key := m.Namespace.Key()
+		key := strings.Join(m.Namespace.Strings(), ".")
 		for _, tag := range tagsForPrefix {
 			nextTag, ok := m.Tags[tag]
 			if ok {
