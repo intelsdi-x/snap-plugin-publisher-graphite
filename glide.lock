@@ -1,21 +1,17 @@
-hash: bdb35fb3e772df1406ebbc495d9d9b77b02d2f729b48527926c857070d431caf
-updated: 2016-11-09T13:35:17.338229481-08:00
+hash: 17cb8778e68ae605463a6926649b30ab2e4570c48d0cef22a6b0b7d19a54fd05
+updated: 2016-11-21T15:26:19.087139259-08:00
 imports:
 - name: github.com/golang/protobuf
   version: 888eb0692c857ec880338addf316bd662d5e630e
   subpackages:
   - proto
-- name: github.com/intelsdi-x/snap
-  version: 89ba8ab9e12640de3c513f3e821a42771513b891
-  subpackages:
-  - control/plugin
-  - control/plugin/cpolicy
-  - core/ctypes
 - name: github.com/intelsdi-x/snap-plugin-lib-go
-  version: d7be15167858210a70ff958a5844acd93f68d989
+  version: 4b5999a62ffb7604f173c1ab3c2205ba8b559624
   subpackages:
   - v1/plugin
   - v1/plugin/rpc
+- name: github.com/julienschmidt/httprouter
+  version: 8c199fb6259ffc1af525cc3ad52ee60ba8359669
 - name: github.com/marpaia/graphite-golang
   version: c98f562aa632f89588e321a4f6013c3ae57aa48c
 - name: github.com/Sirupsen/logrus
