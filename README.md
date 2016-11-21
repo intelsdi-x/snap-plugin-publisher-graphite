@@ -16,7 +16,8 @@ This plugin publishes metrics to graphite.
 6. [Acknowledgements](#acknowledgements)
 
 ### System Requirements
-* Snap Daemon running
+* The Snap daemon is running
+* A running version of [Graphite](https://graphite.readthedocs.org/en/latest/) reachable by the Snap daemon is required for this plugin to successfully publish data
 
 ### Installation
 #### Download Graphite plugin binary:
@@ -29,7 +30,7 @@ Clone repo into `$GOPATH/src/github/intelsdi-x/`:
 ```
 $ git clone https://github.com/<yourGithubID>/snap-plugin-publisher-graphite
 ```
-Build the plugin by running make in repo:
+Build the plugin by running `make` in the repo:
 ```
 $ make
 ```
@@ -39,12 +40,9 @@ This builds the plugin in `./build`
 * Set up the [Snap framework](https://github.com/intelsdi-x/snap/blob/master/README.md#getting-started)
 
 ## Documentation
-[graphite](https://graphite.readthedocs.org/en/latest/)
 
 ### Task Manifest Config
-In task manifest, the config section of graphite publisher describes how to establish a connection.
-
-List of config arguments:
+A Task Manifest that includes the publishing to Graphite will require configuration data in order for the plugin to establish a connection. Config arguments include:
 * "server" (required) - the IP of graphite host.
 * "port" (optional) - 2003 by default.
 * "prefix_tags" (optional) - coma separated list of metric tags used to add prefix on the published name, "plugin_running_on" by default.
@@ -52,27 +50,27 @@ List of config arguments:
 
 ### Examples
 
-Example of running [psutil collector plugin](https://github.com/intelsdi-x/snap-plugin-collector-psutil), [movingaverage processor plugin](https://github.com/intelsdi-x/snap-plugin-processor-movingaverage),  and publishing data to graphite.
+An example of running the [psutil collector plugin](https://github.com/intelsdi-x/snap-plugin-collector-psutil), [statistics processor plugin](https://github.com/intelsdi-x/snap-plugin-processor-statistics), and publishing data to Graphite is available in the example
 Set up the [Snap framework](https://github.com/intelsdi-x/snap/blob/master/README.md#getting-started)
 
-Ensure [snap daemon is running](https://github.com/intelsdi-x/snap#running-snap):
+Ensure [snap daemon is running](https://github.com/intelsdi-x/snap#running-snap) in one of the following ways:
 * initd: `service snap-telemetry start`
 * systemd: `systemctl start snap-telemetry`
-* command line: `sudo snapd -l 1 -t 0 &`
+* manually: `sudo snapteld -l 1 -t 0 &`
 
 
-Download and load Snap plugins:
+Download and load Snap plugins (paths to binary files for Linux/amd64):
 ```
 $ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-publisher-graphite/latest/linux/x86_64/snap-plugin-publisher-graphite
-$ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-processor-movingaverage/latest/linux/x86_64/snap-plugin-processor-movingaverage
+$ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-processor-statistics/latest/linux/x86_64/snap-plugin-processor-statistics
 $ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-collector-psutil/latest/linux/x86_64/snap-plugin-collector-psutil
-$ snapctl plugin load snap-plugin-publisher-graphite
-$ snapctl plugin load snap-plugin-processor-movingaverage
-$ snapctl plugin load snap-plugin-collector-psutil
+$ snaptel plugin load snap-plugin-publisher-graphite
+$ snaptel plugin load snap-plugin-processor-statistics
+$ snaptel plugin load snap-plugin-collector-psutil
 ```
 
 Create a [task manifest](https://github.com/intelsdi-x/snap/blob/master/docs/TASKS.md) (see [exemplary tasks](examples/tasks/)),
-for example `psutil-movingaverage-graphite.json` with following content:
+for example `psutil-statistics-graphite.json` with following content:
 ```json
 {
   "version": 1,
@@ -93,19 +91,16 @@ for example `psutil-movingaverage-graphite.json` with following content:
       },
       "process": [
         {
-          "plugin_name": "movingaverage",
-          "config": {
-            "MovingAvgBufLength": 5
-          }
-        }
-      ],
-      "publish": [
-        {
-          "plugin_name": "graphite",
-          "config": {
-            "server": "127.0.0.1",
-            "port": 2003
-          }
+          "plugin_name": "statistics",
+          "publish": [
+            {
+              "plugin_name": "graphite",
+              "config": {
+                "server": "127.0.0.1",
+                "port": 2003
+              }
+            }
+          ]
         }
       ]
     }
@@ -115,17 +110,17 @@ for example `psutil-movingaverage-graphite.json` with following content:
 
 Create a task:
 ```
-$ snapctl task create -t psutil-movingaverage-graphite.json
+$ snaptel task create -t psutil-statistics-graphite.json
 ```
 
 Watch created task:
 ```
-$ snapctl task watch <task_id>
+$ snaptel task watch <task_id>
 ```
 
 To stop previously created task:
 ```
-$ snapctl task stop <task_id>
+$ snaptel task stop <task_id>
 ```
 
 ### Roadmap
