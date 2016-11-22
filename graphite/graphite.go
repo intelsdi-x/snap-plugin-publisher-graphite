@@ -30,7 +30,7 @@ import (
 
 const (
 	Name    = "graphite"
-	Version = 4
+	Version = 5
 )
 
 type GraphitePublisher struct {
