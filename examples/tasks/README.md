@@ -18,13 +18,13 @@ Running the sample is as *easy* as running the script `./run-example.sh`.
     - Snap task definition
 - [docker-compose.yml](docker-compose.yml)
     - A docker compose file which defines two linked containers
-        - "runner" is the container where snapd is run from. You will be dumped 
+        - "runner" is the container where snapteld is run from. You will be dumped 
         into a shell in this container after running 
         [run-example.sh](run-example.sh). Exiting the shell will 
         trigger cleaning up the containers used in the example.
         - "graphite" is the container running graphite.
 - [mock-passthru-graphite.sh](mock-passthru-graphite.sh)
-    - Downloads `snapd`, `snapctl`, `snap-plugin-publisher-graphite`,
+    - Downloads `snapteld`, `snaptel`, `snap-plugin-publisher-graphite`,
     `snap-plugin-collector-mock2-grpc` `snap-plugin-processor-passthru-grpc` and
     starts the task [mock-passthru-graphite.json](mock-passthru-graphite.json).
 - [.setup.sh](.setup.sh)
