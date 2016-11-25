@@ -18,4 +18,4 @@ export PLUGIN_SRC="${__proj_dir}"
 . "${__proj_dir}/examples/tasks/.setup.sh"
 
 # downloads plugins, starts snap, load plugins and start a task
-cd "${__proj_dir}/examples/tasks" && docker-compose exec main bash -c "PLUGIN_PATH=/etc/snap/plugins /${__proj_name}/examples/tasks/mock-passthru-graphite.sh && printf \"\n\nhint: type 'snaptel task list'\ntype 'exit' when your done\n\n\" && bash"
+cd "${__proj_dir}/examples/tasks" && docker-compose exec main bash -c "PLUGIN_PATH=/etc/snap/plugins /${__proj_name}/examples/tasks/psutil-statistics-graphite.sh && printf \"\n\nhint: type 'snaptel task list'\ntype 'exit' when your done\n\n\" && bash"

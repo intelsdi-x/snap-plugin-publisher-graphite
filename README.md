@@ -70,7 +70,7 @@ $ snaptel plugin load snap-plugin-collector-psutil
 ```
 
 Create a [task manifest](https://github.com/intelsdi-x/snap/blob/master/docs/TASKS.md) (see [exemplary tasks](examples/tasks/)),
-for example `psutil-statistics-graphite.json` with following content:
+for example `psutil-statistics-graphite-simple.json` with following content:
 ```json
 {
   "version": 1,
@@ -96,8 +96,7 @@ for example `psutil-statistics-graphite.json` with following content:
             {
               "plugin_name": "graphite",
               "config": {
-                "server": "127.0.0.1",
-                "port": 2003
+                "server": "127.0.0.1"
               }
             }
           ]

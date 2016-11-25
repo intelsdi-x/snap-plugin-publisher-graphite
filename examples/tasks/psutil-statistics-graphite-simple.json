@@ -22,11 +22,7 @@
             {
               "plugin_name": "graphite",
               "config": {
-                "server": "graphite",
-                "log-level": "debug",
-                "prefix": "myprefix",
-                "prefix_tags": "plugin_running_on",
-                "port": 2003
+                "server": "127.0.0.1"
               }
             }
           ]
