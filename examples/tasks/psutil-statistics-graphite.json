@@ -17,19 +17,16 @@
       },
       "process": [
         {
-          "plugin_name": "movingaverage",
-          "config": {
-            "MovingAvgBufLength": 5
-          }
-        }
-      ],
-      "publish": [
-        {
-          "plugin_name": "graphite",
-          "config": {
-            "server": "127.0.0.1",
-            "port": 2003
-          }
+          "plugin_name": "statistics",
+          "publish": [
+            {
+              "plugin_name": "graphite",
+              "config": {
+                "server": "127.0.0.1",
+                "port": 2003
+              }
+            }
+          ]
         }
       ]
     }
