@@ -7,9 +7,7 @@
     "workflow": {
         "collect": {
             "metrics": {
-                "/intel/mock/foo": {},
-                "/intel/mock/bar": {},
-                "/intel/mock/*/baz": {}
+                "/intel/mock/*": {}
             },
             "config": {
                 "/intel/mock": {
