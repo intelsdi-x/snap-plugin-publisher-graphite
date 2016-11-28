@@ -16,8 +16,8 @@ PLUGIN_PATH=${PLUGIN_PATH:-"${TMPDIR}/snap/plugins"}
 mkdir -p $PLUGIN_PATH
 
 _info "Get latest plugins"
-(cd $PLUGIN_PATH && curl -sfLSO http://snap.ci.snap-telemetry.io/snap/master/latest/snap-plugin-collector-mock2-grpc && chmod 755 snap-plugin-collector-mock2-grpc)
-(cd $PLUGIN_PATH && curl -sfLSO http://snap.ci.snap-telemetry.io/snap/master/latest/snap-plugin-processor-passthru-grpc && chmod 755 snap-plugin-processor-passthru-grpc)
+(cd $PLUGIN_PATH && curl -sfLSO http://snap.ci.snap-telemetry.io/plugins/snap-plugin-collector-psutil/latest/linux/x86_64/snap-plugin-collector-psutil && chmod 755 snap-plugin-collector-psutil)
+(cd $PLUGIN_PATH && curl -sfLSO http://snap.ci.snap-telemetry.io/plugins/snap-plugin-processor-statistics/latest/linux/x86_64/snap-plugin-processor-statistics && chmod 755 snap-plugin-processor-statistics)
 (cd $PLUGIN_PATH && curl -sfLSO http://snap.ci.snap-telemetry.io/plugins/snap-plugin-publisher-graphite/latest_build/linux/x86_64/snap-plugin-publisher-graphite && chmod 755 snap-plugin-publisher-graphite)
 
 # this block will wait check if snaptel and snapteld are loaded before the plugins are loaded and the task is started
@@ -26,12 +26,12 @@ _info "Get latest plugins"
                 then
 
                     _info "loading plugins"
-                    snaptel plugin load "${PLUGIN_PATH}/snap-plugin-collector-mock2-grpc"
-                    snaptel plugin load "${PLUGIN_PATH}/snap-plugin-processor-passthru-grpc"
+                    snaptel plugin load "${PLUGIN_PATH}/snap-plugin-collector-psutil"
+                    snaptel plugin load "${PLUGIN_PATH}/snap-plugin-processor-statistics"
                     snaptel plugin load "${PLUGIN_PATH}/snap-plugin-publisher-graphite"
 
                     _info "creating and starting a task"
-                    snaptel task create -t "${__dir}/mock-passthru-graphite.json" 
+                    snaptel task create -t "${__dir}/psutil-statistics-graphite.json" 
 
                     SNAP_FLAG=1
 
