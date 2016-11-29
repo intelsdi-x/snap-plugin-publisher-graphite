@@ -22,7 +22,7 @@ spec:
               env:
                 - name: SNAP_VERSION
                   value: "latest"
-              imagePullPolicy: "IfNotPresent"
+              imagePullPolicy: "Always"
 ---
 apiVersion: v1
 kind: Service
