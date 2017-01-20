@@ -1,20 +1,15 @@
 version: '2'
 services:
-  main:
-    container_name: runner
+  snap:
     image: intelsdi/snap:alpine_test
     environment:
-      - SNAP_VERSION=latest
+      SNAP_VERSION: ${SNAP_VERSION}
     volumes:
-      - ${PLUGIN_SRC}:/snap-plugin-publisher-graphite
+      - "${PLUGIN_PATH}:/plugin"
     links:
       - graphite
   graphite:
-    container_name: graphite
     image: hopsoft/graphite-statsd:v0.9.15-phusion0.9.18
     ports:
       - "2003:2003"
       - "80:80"
-    expose:
-      - "2003"
-      - "80"

@@ -65,6 +65,7 @@ describe docker_compose(compose_yml) do
               id = subject.stdout.split("\n").find{|l|l=~/^ID:/}
               task_id = $1 if id.match(/^ID: (.*)$/)
               expect(task_id).to_not be_nil
+              sleep 5
             }
           end
 
