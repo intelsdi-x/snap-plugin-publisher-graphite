@@ -39,7 +39,7 @@ _debug "project directory ${__proj_dir}"
 [[ "$TEST_TYPE" =~ ^(small|medium|large|legacy|build)$ ]] || _error "invalid TEST_TYPE (value must be 'small', 'medium', 'large', 'legacy', or 'build' recieved:${TEST_TYPE}"
 
 _gofmt() {
-  test -z "$(gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") | tee /dev/stderr)"
+  test -z "$(gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*" -not -path "./.glide/") | tee /dev/stderr)"
 }
 
 test_unit() {

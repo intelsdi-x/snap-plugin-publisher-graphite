@@ -15,6 +15,9 @@ workflow:
       "/intel/psutil/vm/used": {}
     process:
     - plugin_name: statistics
+      config:
+        SlidingWindowLength: 2
+        SlidingFactor: 2
       publish:
       - plugin_name: graphite
         config:
