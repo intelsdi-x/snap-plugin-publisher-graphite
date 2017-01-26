@@ -39,7 +39,7 @@ _debug "project directory ${__proj_dir}"
 [[ "$TEST_TYPE" =~ ^(small|medium|large|legacy|build)$ ]] || _error "invalid TEST_TYPE (value must be 'small', 'medium', 'large', 'legacy', or 'build' recieved:${TEST_TYPE}"
 
 _gofmt() {
-  test -z "$(gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*") | tee /dev/stderr)"
+  test -z "$(gofmt -l -d $(find . -type f -name '*.go' -not -path "./vendor/*" -not -path "./.glide/") | tee /dev/stderr)"
 }
 
 test_unit() {
@@ -70,6 +70,7 @@ test_unit() {
 }
 
 if [[ $TEST_TYPE == "legacy" ]]; then
+  UNIT_TEST="go_test go_cover"
   echo "mode: count" > profile.cov
   export TEST_TYPE="unit"
   test_unit
@@ -94,7 +95,7 @@ elif [[ $TEST_TYPE == "large" ]]; then
   elif [[ -f "${__dir}/large_compose.sh" ]]; then
     . "${__dir}/large_compose.sh"
   else
-    _info "No large tests."
+    . "${__dir}/large.sh"
   fi
 elif [[ $TEST_TYPE == "build" ]]; then
   "${__dir}/build.sh"
