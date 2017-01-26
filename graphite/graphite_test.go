@@ -22,6 +22,7 @@ limitations under the License.
 package graphite
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
@@ -67,9 +68,28 @@ func TestGraphitePlugin(t *testing.T) {
 					Convey("So testConfig should return the right port config", func() {
 						So(err, ShouldBeNil)
 						So(port, ShouldEqual, int64(8080))
+
 					})
 				})
 			})
+		})
+
+		Convey("Check for Illegal chars and replace", func() {
+			key := "testing if this (string) has / any illegal, {characters}"
+			illegal := "(), /{}"
+			expected := "testing_if_this_[string]_has_|_any_illegal;_[characters]"
+			r := strings.NewReplacer(" ", "_",
+				",", ";",
+				"(", "[",
+				")", "]",
+				"/", "|",
+				"{", "[",
+				"}", "]")
+
+			if strings.ContainsAny(key, illegal) {
+				key = r.Replace(key)
+			}
+			So(key, ShouldEqual, expected)
 		})
 	})
 }

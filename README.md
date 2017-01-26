@@ -48,6 +48,9 @@ A Task Manifest that includes the publishing to Graphite will require configurat
 * "prefix_tags" (optional) - coma separated list of metric tags used to add prefix on the published name, "plugin_running_on" by default.
 * "prefix" (optional) - change the published name prefix, happens before prefixes from "prefix_tags".
 
+Note: Tags in the graphite plugin are joined with the metric name without any kind of escaping and that could introduce an unintentional seperator. For example, spaces in tag could lead to a wrong request for the graphite plugin, as the metric name will be in the format %s %s %s. 
+To avoid that, the graphite plugin handles special characters that are not legal in a graphite namespace. Those special characters include: , /(){}. Currently, the graphite publisher checks for all the illegal characters in the metric name and replaces each of those illegal characters with legal characters. 
+
 ### Examples
 
 An example of running the [psutil collector plugin](https://github.com/intelsdi-x/snap-plugin-collector-psutil), [statistics processor plugin](https://github.com/intelsdi-x/snap-plugin-processor-statistics), and publishing data to Graphite is available in the example
