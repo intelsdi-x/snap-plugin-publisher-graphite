@@ -30,13 +30,25 @@ import (
 
 const (
 	Name    = "graphite"
-	Version = 5
+	Version = 6
+)
+
+var (
+	illegal     = "(), /{}"
+	replacement = strings.NewReplacer(" ", "_",
+		",", ";",
+		"(", "[",
+		")", "]",
+		"/", "|",
+		"{", "[",
+		"}", "]")
 )
 
 type GraphitePublisher struct {
 }
 
 func (f *GraphitePublisher) Publish(metrics []plugin.Metric, cfg plugin.Config) error {
+
 	logger := getLogger(cfg)
 	logger.Debug("Publishing started")
 	var tagsForPrefix []string
@@ -79,6 +91,12 @@ func (f *GraphitePublisher) Publish(metrics []plugin.Metric, cfg plugin.Config) 
 		}
 		data := fmt.Sprintf("%v", m.Data)
 		logger.Debug("Metric ready to send %s:%s", key, data)
+
+		if strings.ContainsAny(key, illegal) {
+			key := replacement.Replace(key)
+			log.Info("Metric after replacement is %s", key)
+		}
+
 		giteMetrics[i] = graphite.NewMetric(key, data, m.Timestamp.Unix())
 	}
 
