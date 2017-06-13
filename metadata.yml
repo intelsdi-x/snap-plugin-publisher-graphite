@@ -2,8 +2,10 @@ name: graphite
 type: publisher
 maintainer: core
 license: Apache-2.0
-description: "Publishes metrics to graphite."
+description: "Publishes Snap metrics to Graphite"
 badge:
   - "[![Build Status](https://travis-ci.org/intelsdi-x/snap-plugin-publisher-graphite.svg?branch=master)](https://travis-ci.org/intelsdi-x/snap-plugin-publisher-graphite)"
+  - "[![Build Status](https://ci.snap-telemetry.io/job/snap-plugin-publisher-graphite-ec2-periodic/badge/icon)](https://ci.snap-telemetry.io/job/snap-plugin-publisher-graphite-ec2-periodic/)"
 ci:
   - https://travis-ci.org/intelsdi-x/snap-plugin-publisher-graphite
+  - https://ci.snap-telemetry.io/job/snap-plugin-publisher-graphite-ec2-periodic
