@@ -12,4 +12,5 @@ services:
       UDP_DB: "test"
     expose:
       - "80"
-      - "2003" 
+      - "2003"
+      - "4444/udp" 
