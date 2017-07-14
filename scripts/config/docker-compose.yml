@@ -1,0 +1,15 @@
+version: '2'
+services:
+  golang:
+    container_name: golang_${GOLANGVER}
+    image: intelsdi/gvm:latest
+    volumes:
+      - ${PLUGIN_SRC}:/snap-plugin-publisher-graphite
+  influxdb:
+    container_name: graphite
+    image: hopsoft/graphite-statsd
+    environment:
+      UDP_DB: "test"
+    expose:
+      - "80"
+      - "2003" 
