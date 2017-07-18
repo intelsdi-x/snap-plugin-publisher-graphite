@@ -19,23 +19,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 package graphite
+
 import (
-	. "net/http"
-
+	"net/http"
 	"os"
+	"testing"
 	"time"
-  "testing"
-  "strings"
 
-  . "github.com/smartystreets/goconvey/convey"
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func init() {
 	//Do a ping to make sure the docker image actually came up. Otherwise this can fail Travis builds
 	for i := 0; i < 3; i++ {
 		resp, err := http.Get("http://" + os.Getenv("SNAP_GRAPHITE_HOST") + ":80/ping")
-    if err != nil || resp.StatusCode < 200 || resp.StatusCode > 299 {
+		if err != nil || resp.StatusCode < 200 || resp.StatusCode > 299 {
 			//Try again after 3 second
 			time.Sleep(3 * time.Second)
 		} else {
@@ -50,31 +49,32 @@ func init() {
 
 func TestGraphitePublisher(t *testing.T) {
 
-  Convey("snap plugin Graphite integration testing with Graphite", t, func() {
-    ip := &GraphitePublisher{}
-    var retention string
+	Convey("snap plugin Graphite integration testing with Graphite", t, func() {
 
-		if strings.HasPrefix(os.Getenv("GRAPHITE_VERSION"), "0.") {
-			retention = "default"
-		} else {
-			retention = "autogen"
-		}
 		config := plugin.Config{
-			"host":          os.Getenv("SNAP_GRAPHITE_HOST"),
-			"skip-verify":   false,
-			"retention":     retention,
-			"isMultiFields": false,
-			"debug":         false,
-			"log-level":     "debug",
-			"precision":     "s",
+			"server":      os.Getenv("SNAP_GRAPHITE_HOST"),
+			"port":        int64(80),
+			"prefix_tags": "medium_test_prefix_tags",
+			"prefix":      "medium_test_prefix",
 		}
+		tests(config)
+	})
+}
 
-		config["scheme"] = HTTP
-		config["port"] = int64(80)
-		tests(HTTP, config)
-
-		config["scheme"] = UDP
-		config["port"] = int64(4444)
-		tests(UDP, config)
-  })
+func tests(config plugin.Config) {
+	ip := &GraphitePublisher{}
+	tags := map[string]string{"zone": "red"}
+	mcfg := map[string]interface{}{"field": "abc123"}
+	Convey("Publish integer metric", func() {
+		metrics := []plugin.Metric{plugin.Metric{
+			Namespace: plugin.NewNamespace("test1"),
+			Timestamp: time.Now(),
+			Config:    mcfg,
+			Tags:      tags,
+			Unit:      "someunit",
+			Data:      99,
+		}}
+		err := ip.Publish(metrics, config)
+		So(err, ShouldBeNil)
+	})
 }
