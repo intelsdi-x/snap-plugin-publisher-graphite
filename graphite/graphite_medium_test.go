@@ -48,33 +48,84 @@ func init() {
 }
 
 func TestGraphitePublisher(t *testing.T) {
-
-	Convey("snap plugin Graphite integration testing with Graphite", t, func() {
-
-		config := plugin.Config{
-			"server":      os.Getenv("SNAP_GRAPHITE_HOST"),
-			"port":        int64(80),
-			"prefix_tags": "medium_test_prefix_tags",
-			"prefix":      "medium_test_prefix",
-		}
-		tests(config)
-	})
-}
-
-func tests(config plugin.Config) {
 	ip := &GraphitePublisher{}
+	config := plugin.Config{
+		"server":      os.Getenv("SNAP_GRAPHITE_HOST"),
+		"port":        int64(80),
+		"prefix":      "medium_test_prefix",
+		"prefix_tags": "medium_test_prefix_tag_1,medium_test_prefix_tag_2",
+	}
 	tags := map[string]string{"zone": "red"}
 	mcfg := map[string]interface{}{"field": "abc123"}
-	Convey("Publish integer metric", func() {
-		metrics := []plugin.Metric{plugin.Metric{
-			Namespace: plugin.NewNamespace("test1"),
-			Timestamp: time.Now(),
-			Config:    mcfg,
-			Tags:      tags,
-			Unit:      "someunit",
-			Data:      99,
-		}}
-		err := ip.Publish(metrics, config)
-		So(err, ShouldBeNil)
+	metric1 := plugin.Metric{
+		Namespace: plugin.NewNamespace("test1"),
+		Timestamp: time.Now(),
+		Config:    mcfg,
+		Tags:      tags,
+		Unit:      "someunit",
+		Data:      99,
+	}
+	metric2 := plugin.Metric{
+		Namespace: plugin.NewNamespace("test2"),
+		Timestamp: time.Now(),
+		Config:    mcfg,
+		Tags:      tags,
+		Unit:      "someunit2",
+		Data:      200,
+	}
+	Convey("Snap plugin Graphite integration testing with Graphite", t, func() {
+
+		Convey("Publish with correct data", func() {
+
+			Convey("single metric", func() {
+				err := ip.Publish([]plugin.Metric{metric1}, config)
+				So(err, ShouldBeNil)
+			})
+			Convey("two integer metrics", func() {
+				err := ip.Publish([]plugin.Metric{metric1, metric2}, config)
+				So(err, ShouldBeNil)
+			})
+		})
+
 	})
 }
+
+// func TestWrongServer(t *testing.T) {
+// 	Convey("Publish with nil server and port", func() {
+// 		fmt.Println(config.GetString)
+// 		err := ip.Publish(metrics, config)
+// 		So(err, ShouldNotBeNil)
+// 	})
+// 	config["server"] = os.Getenv("SNAP_GRAPHITE_HOST")
+// 	Convey("Publish with nil port", func() {
+// 		err := ip.Publish(metrics, config)
+// 		fmt.Println(err)
+// 		fmt.Println(config["server"], config["port"])
+// 		So(err, ShouldNotBeNil)
+// 	})
+
+// 	config["server"] = "6.6.6.6"
+// 	config["port"] = int64(80)
+// 	Convey("Publish with wrong server", func() {
+// 		err := ip.Publish(metrics, config)
+// 		So(err, ShouldBeNil)
+// 		err = ip.Publish(metrics, config)
+// 		So(err, ShouldNotBeNil)
+// 	})
+
+// 	config["server"] = os.Getenv("SNAP_GRAPHITE_HOST")
+// 	config["port"] = int64(666)
+// 	Convey("Publish with wrong port", func() {
+// 		err := ip.Publish(metrics, config)
+// 		So(err, ShouldNotBeNil)
+// 	})
+
+// 	config["prefix"] = "medium_test_prefix"
+// 	config["port"] = int64(80)
+// 	Convey("Publish without metrics", func() {
+// 		Convey("single metric", func() {
+// 			err := ip.Publish(metrics, config)
+// 			So(err, ShouldBeNil)
+// 		})
+// 	})
+// }
