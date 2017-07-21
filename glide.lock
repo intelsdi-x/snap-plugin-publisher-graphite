@@ -1,5 +1,5 @@
 hash: 17cb8778e68ae605463a6926649b30ab2e4570c48d0cef22a6b0b7d19a54fd05
-updated: 2016-11-21T15:26:19.087139259-08:00
+updated: 2017-07-21T08:47:03.365832603+02:00
 imports:
 - name: github.com/golang/protobuf
   version: 888eb0692c857ec880338addf316bd662d5e630e
@@ -15,9 +15,9 @@ imports:
 - name: github.com/marpaia/graphite-golang
   version: c98f562aa632f89588e321a4f6013c3ae57aa48c
 - name: github.com/Sirupsen/logrus
-  version: d26492970760ca5d33129d2d799e34be5c4782eb
+  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
 - name: golang.org/x/net
-  version: 04557861f124410b768b1ba5bb3a91b705afbfc6
+  version: 154d9f9ea81208afed560f4cf27b4860c8ed1904
   subpackages:
   - context
   - http2
