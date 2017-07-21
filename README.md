@@ -132,7 +132,7 @@ There isn't a current roadmap for this plugin, but it is in active development. 
 If you have a feature request, please add it as an [issue](https://github.com/intelsdi-x/snap-plugin-publisher-graphite/issues/new) and/or submit a [pull request](https://github.com/intelsdi-x/snap-plugin-publisher-graphite/pulls).
 
 ### Known issues
-Graphite plugin does not check whether on address to which it writes is griphite or not. If exists any service on specific address and port Graphite Publisher should not crash.
+Graphite plugin does not check whether on address to which it publishes griphite is running or not. If exists any service on specific address and port Graphite Publisher should not crash.
 
 ## Community Support
 This repository is one of **many** plugins in **Snap**, a powerful telemetry framework. See the full project at http://github.com/intelsdi-x/snap To reach out to other users, head to the [main framework](https://github.com/intelsdi-x/snap#community-support)
