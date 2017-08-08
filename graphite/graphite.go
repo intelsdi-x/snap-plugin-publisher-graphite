@@ -30,7 +30,7 @@ import (
 
 const (
 	Name    = "graphite"
-	Version = 6
+	Version = 7
 )
 
 var (
