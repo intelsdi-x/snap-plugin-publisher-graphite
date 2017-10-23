@@ -23,9 +23,9 @@ import (
 	"fmt"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
 	"github.com/marpaia/graphite-golang"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
