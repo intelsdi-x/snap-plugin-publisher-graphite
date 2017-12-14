@@ -93,3 +93,154 @@ func TestGraphitePlugin(t *testing.T) {
 		})
 	})
 }
+
+func Test_createKey(t *testing.T) {
+	type args struct {
+		m          plugin.Metric
+		enableTags bool
+	}
+	tests := []struct {
+		description string
+		args        args
+		matchKey    string
+		matchTags   []string
+	}{
+		{
+			description: "static namespace",
+			args: args{
+				m: plugin.Metric{
+					Namespace: plugin.Namespace{
+						plugin.NamespaceElement{Value: "test"},
+						plugin.NamespaceElement{Value: "bar"},
+						plugin.NamespaceElement{Value: "value"},
+					},
+				},
+				enableTags: false,
+			},
+			matchKey:  "test.bar.value",
+			matchTags: []string{},
+		},
+		{
+			description: "dynamic namespace",
+			args: args{
+				m: plugin.Metric{
+					Namespace: plugin.Namespace{
+						plugin.NamespaceElement{Value: "test"},
+						plugin.NamespaceElement{Value: "bar", Name: "foo"},
+						plugin.NamespaceElement{Value: "value"},
+					},
+				},
+				enableTags: false,
+			},
+			matchKey:  "test.bar.value",
+			matchTags: []string{},
+		},
+		{
+			description: "TagsEnabled, static namespace",
+			args: args{
+				m: plugin.Metric{
+					Namespace: plugin.Namespace{
+						plugin.NamespaceElement{Value: "test"},
+						plugin.NamespaceElement{Value: "bar"},
+						plugin.NamespaceElement{Value: "value"},
+					},
+				},
+				enableTags: true,
+			},
+			matchKey:  "test.bar.value",
+			matchTags: []string{},
+		},
+		{
+			description: "TagsEnabled, dynamic namespace",
+			args: args{
+				m: plugin.Metric{
+					Namespace: plugin.Namespace{
+						plugin.NamespaceElement{Value: "test"},
+						plugin.NamespaceElement{Value: "bar", Name: "foo"},
+						plugin.NamespaceElement{Value: "value"},
+					},
+				},
+				enableTags: true,
+			},
+			matchKey: "test.value",
+			matchTags: []string{
+				"foo=bar",
+			},
+		},
+		{
+			description: "TagsEnabled, dynamic namespace with tags",
+			args: args{
+				m: plugin.Metric{
+					Namespace: plugin.Namespace{
+						plugin.NamespaceElement{Value: "test"},
+						plugin.NamespaceElement{Value: "bar", Name: "foo"},
+						plugin.NamespaceElement{Value: "value"},
+					},
+					Tags: map[string]string{
+						"test": "tag",
+					},
+				},
+				enableTags: true,
+			},
+			matchKey: "test.value",
+			matchTags: []string{
+				"foo=bar",
+				"test=tag",
+			},
+		},
+		{
+			description: "TagsEnabled, dynamic namespace with plugin_running_on tag",
+			args: args{
+				m: plugin.Metric{
+					Namespace: plugin.Namespace{
+						plugin.NamespaceElement{Value: "test"},
+						plugin.NamespaceElement{Value: "bar", Name: "foo"},
+						plugin.NamespaceElement{Value: "value"},
+					},
+					Tags: map[string]string{
+						"plugin_running_on": "example",
+					},
+				},
+				enableTags: true,
+			},
+			matchKey: "test.value",
+			matchTags: []string{
+				"foo=bar",
+				"host=example",
+			},
+		},
+		{
+			description: "TagsEnabled, dynamic namespace with dynamic namespace matching tag",
+			args: args{
+				m: plugin.Metric{
+					Namespace: plugin.Namespace{
+						plugin.NamespaceElement{Value: "test"},
+						plugin.NamespaceElement{Value: "bar", Name: "foo"},
+						plugin.NamespaceElement{Value: "value"},
+					},
+					Tags: map[string]string{
+						"foo": "bar1",
+					},
+				},
+				enableTags: true,
+			},
+			matchKey: "test.value",
+			matchTags: []string{
+				"foo=bar1",
+			},
+		},
+	}
+	Convey("Ensure proper graphite metric name conversion", t, func() {
+		for _, tt := range tests {
+			Convey(tt.description, func() {
+				key := createKey(tt.args.m, []string{}, tt.args.enableTags)
+				if tt.args.enableTags {
+					for _, tag := range tt.matchTags {
+						So(key, ShouldContainSubstring, tag)
+					}
+				}
+				So(strings.SplitN(key, ";", 2)[0], ShouldEqual, tt.matchKey)
+			})
+		}
+	})
+}
