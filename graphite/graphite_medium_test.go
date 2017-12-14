@@ -54,6 +54,7 @@ func TestGraphitePublisher(t *testing.T) {
 		"port":        int64(80),
 		"prefix":      "medium_test_prefix",
 		"prefix_tags": "medium_test_prefix_tag_1,medium_test_prefix_tag_2",
+		"enable_tags": true,
 	}
 	tags := map[string]string{"zone": "red"}
 	mcfg := map[string]interface{}{"field": "abc123"}
@@ -108,6 +109,7 @@ func TestWrongConfig(t *testing.T) {
 	config := plugin.Config{
 		"prefix":      "medium_test_prefix",
 		"prefix_tags": "medium_test_prefix_tag_1,medium_test_prefix_tag_2",
+		"enable_tags": false,
 	}
 	Convey("Incorrect config ", t, func() {
 		Convey("nil server and port", func() {
